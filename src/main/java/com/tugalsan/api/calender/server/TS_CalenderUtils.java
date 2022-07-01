@@ -5,6 +5,7 @@ import com.sun.jna.platform.win32.WinBase.*;
 import com.sun.jna.win32.*;
 import com.tugalsan.api.pack.client.*;
 import com.tugalsan.api.string.client.*;
+import com.tugalsan.api.unsafe.client.*;
 import java.text.*;
 import java.util.*;
 
@@ -15,12 +16,10 @@ public class TS_CalenderUtils {
     }
 
     public static Date date(String dateStr, String dateFormat) {
-        try {
+        return TGS_UnSafe.compile(() -> {
             var sdf = new SimpleDateFormat(dateFormat);
             return sdf.parse(dateStr);
-        } catch (ParseException ex) {
-            throw new RuntimeException(ex);
-        }
+        });
     }
 
     public static interface WinKernel32 extends StdCallLibrary {
