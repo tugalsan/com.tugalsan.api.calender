@@ -59,12 +59,12 @@ public class TS_CalenderUtils {
     }
 
     private static boolean execute(CharSequence commandLine) {
-        try {
+        return TGS_UnSafe.compile(() -> {
             Runtime.getRuntime().exec(commandLine.toString());
             return true;
-        } catch (Exception e) {
+        }, e -> {
             e.printStackTrace();
-        }
-        return false;
+            return false;
+        });
     }
 }

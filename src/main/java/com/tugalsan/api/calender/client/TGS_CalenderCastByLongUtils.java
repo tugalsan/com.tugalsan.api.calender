@@ -2,6 +2,7 @@ package com.tugalsan.api.calender.client;
 
 import com.tugalsan.api.pack.client.TGS_Pack2;
 import com.tugalsan.api.pack.client.TGS_Pack3;
+import com.tugalsan.api.unsafe.client.*;
 
 public class TGS_CalenderCastByLongUtils {
 
@@ -31,18 +32,17 @@ public class TGS_CalenderCastByLongUtils {
     }
 
     public static TGS_Pack3<Integer, Integer, Integer> toTime(long timeLong) {
-        try {
-            var sec = parseLastTwoDecimal(timeLong);
-            timeLong -= sec;
-            timeLong /= 100L;
-            var min = parseLastTwoDecimal(timeLong);
-            timeLong -= min;
-            timeLong /= 100L;
-            var hour = timeLong;
+        return TGS_UnSafe.compile(() -> {
+            var mTimeLong = timeLong;
+            var sec = parseLastTwoDecimal(mTimeLong);
+            mTimeLong -= sec;
+            mTimeLong /= 100L;
+            var min = parseLastTwoDecimal(mTimeLong);
+            mTimeLong -= min;
+            mTimeLong /= 100L;
+            var hour = mTimeLong;
             return new TGS_Pack3((int) sec, (int) min, (int) hour);
-        } catch (Exception r) {//DO NOT THROW EXCEPTION PLEASE
-            return null;
-        }
+        }, e -> null);
     }
 
     public static long toTime(TGS_Pack3<Integer, Integer, Integer> timePack) {
@@ -50,18 +50,17 @@ public class TGS_CalenderCastByLongUtils {
     }
 
     public static TGS_Pack3<Integer, Integer, Integer> toDate(long dateLong) {
-        try {
-            var day = parseLastTwoDecimal(dateLong);
-            dateLong -= day;
-            dateLong /= 100L;
-            var month = parseLastTwoDecimal(dateLong);
-            dateLong -= month;
-            dateLong /= 100L;
-            var year = dateLong;
+        return TGS_UnSafe.compile(() -> {
+            var mDateLong = dateLong;
+            var day = parseLastTwoDecimal(mDateLong);
+            mDateLong -= day;
+            mDateLong /= 100L;
+            var month = parseLastTwoDecimal(mDateLong);
+            mDateLong -= month;
+            mDateLong /= 100L;
+            var year = mDateLong;
             return new TGS_Pack3((int) day, (int) month, (int) year);
-        } catch (Exception r) {//DO NOT THROW EXCEPTION PLEASE
-            return null;
-        }
+        }, e -> null);
     }
 
     public static long toDate(TGS_Pack3<Integer, Integer, Integer> datePack) {
@@ -69,15 +68,13 @@ public class TGS_CalenderCastByLongUtils {
     }
 
     public static TGS_Pack2<TGS_Pack3<Integer, Integer, Integer>, TGS_Pack3<Integer, Integer, Integer>> toCalenderPack(long dateLong, long timeLong) {
-        try {
+        return TGS_UnSafe.compile(() -> {
             var date = TGS_CalenderCastByLongUtils.toDate(dateLong);
             var time = TGS_CalenderCastByLongUtils.toTime(timeLong);
             if (date == null || time == null) {
                 return null;
             }
             return new TGS_Pack2(time, date);
-        } catch (Exception r) {//DO NOT THROW EXCEPTION PLEASE
-            return null;
-        }
+        }, e -> null);
     }
 }

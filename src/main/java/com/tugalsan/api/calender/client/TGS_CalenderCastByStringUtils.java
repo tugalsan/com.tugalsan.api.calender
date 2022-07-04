@@ -3,12 +3,13 @@ package com.tugalsan.api.calender.client;
 import com.tugalsan.api.cast.client.TGS_CastUtils;
 import com.tugalsan.api.pack.client.TGS_Pack2;
 import com.tugalsan.api.pack.client.TGS_Pack3;
+import com.tugalsan.api.unsafe.client.*;
 import java.util.*;
 
 public class TGS_CalenderCastByStringUtils {
 
     private static TGS_Pack3<Integer, Integer, Integer> toTarget(CharSequence inputString, TGS_Pack3<Integer, Integer, Integer> targetPack, List<String> delims) {
-        try {
+        return TGS_UnSafe.compile(() -> {
             var inputStringStr = inputString.toString().trim();
             String delimChar = null;
             var delimStartIdx = -1;
@@ -35,9 +36,7 @@ public class TGS_CalenderCastByStringUtils {
                 return null;
             }
             return targetPack;
-        } catch (Exception r) {//DO NOT THROW EXCEPTION PLEASE
-            return null;
-        }
+        }, e -> null);
     }
 
     public static TGS_Pack3<Integer, Integer, Integer> toTime(CharSequence timeString) {
@@ -49,21 +48,19 @@ public class TGS_CalenderCastByStringUtils {
     }
 
     public static TGS_Pack2<TGS_Pack3<Integer, Integer, Integer>, TGS_Pack3<Integer, Integer, Integer>> toCalender(CharSequence dateString_space_timeString) {//09.01.2021 20:54:23
-        var split = dateString_space_timeString.toString().split(" ");
-        try {
+        return TGS_UnSafe.compile(() -> {
+            var split = dateString_space_timeString.toString().split(" ");
             var date = toDate(split[0]);
             var time = toTime(split[1]);
             if (date == null || time == null) {
                 return null;
             }
             return new TGS_Pack2(time, date);
-        } catch (Exception r) {//DO NOT THROW EXCEPTION PLEASE
-            return null;
-        }
+        }, e -> null);
     }
 
     public static TGS_Pack3<Integer, Integer, Integer> toDateHTML5(CharSequence YYYY_MM_DD) {
-        try {
+        return TGS_UnSafe.compile(() -> {
             TGS_Pack3<Integer, Integer, Integer> datePack = new TGS_Pack3();
             datePack.value2 = TGS_CastUtils.toInteger(YYYY_MM_DD.subSequence(0, 4).toString());
             datePack.value1 = TGS_CastUtils.toInteger(YYYY_MM_DD.subSequence(5, 7).toString());
@@ -72,8 +69,6 @@ public class TGS_CalenderCastByStringUtils {
                 return null;
             }
             return datePack;
-        } catch (Exception r) {//DO NOT THROW EXCEPTION PLEASE
-            return null;
-        }
+        }, e -> null);
     }
 }
